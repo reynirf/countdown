@@ -7,87 +7,90 @@
 
 		var countdownSecond = 0,
 			countdownMinute = 0,
-			countdownKlokke,
-			countDownstartButton,
-			countDownresetButton,
-			countDownStatusTekst,
-			minChange,
-			d = document,
-			alarm = new Audio('alarm.mp3')
+			klokke,
+			secHTML,
+			minHTML,
+			startBtn,
+			resetBtn,
+			statusHTML,
+			minChange;
+
+		const d = document,
+		 	  alarm = new Audio('alarm.mp3');
 
 		window.onload = () => {
-			countdownMinutes = d.getElementById("countdownMinute");
-			countdownSeconds = d.getElementById("countdownSecond");
-			countDownstartButton = d.getElementById("countDownstartButton");
-			countDownresetButton = d.getElementById("countDownresetButton");
-			countDownStatusTekst = d.getElementById("countDownStatusTekst");
-			minChange = d.getElementById("minChange");
-			countDownresetButton.disabled = true;
+			this.minHTML = d.getElementById("countdownMinute");
+			this.secHTML = d.getElementById("countdownSecond");
+			this.startBtn = d.getElementById("startBtn");
+			this.resetBtn = d.getElementById("resetBtn");
+			this.statusHTML = d.getElementById("statusHTML");
+			this.minChange = d.getElementById("minChange");
+			this.resetBtn.disabled = true;
 
 			//onclicks
-			countDownstartButton.onclick = start;
-			countDownresetButton.onclick = reset;
+			this.startBtn.onclick = start;
+			this.resetBtn.onclick = reset;
 		}
 
 		var start = () => {
 			if(isLovlig()){ //sjekke om value fra input er "lovlig"
 				interval(); //starte klokke
-				countDownresetButton.disabled = false;
-				countDownstartButton.disabled = true;
+				this.resetBtn.disabled = false;
+				this.startBtn.disabled = true;
 			}
 		}
 
 		var reset = () => {
 			stopInterval('no alarm') //stoppe klokke uten alarm
-			countDownStatusTekst.innerHTML = "Nedtelling tilbakestilt";
+			this.statusHTML.innerHTML = "Nedtelling tilbakestilt";
 		}
 		var interval = () => {
 			clockFunctions() //få tallene opp på skjermen før Intervallet kjøres (ellers må du vente ett sekund før du får tallene opp på skjermen)
-			this.countdownKlokke = setInterval(function(){
-				if(countdownSecond == 1 && countdownMinute == 0){
+			this.klokke = setInterval(function(){
+				if(countdownSecond == 1 && this.countdownMinute == 0){
 					stopInterval() //stoppe klokken med alarm når countdown-en er ferdig
 				}
 				clockFunctions() //kjøre klokkefunksjonene hvert sekund
 			}, 1000);
-			countDownStatusTekst.innerHTML = "Nedtelling kjører...";
+			this.statusHTML.innerHTML = "Nedtelling kjører...";
 		}
 
 		var clockFunctions = () => {
 			//vanlige klokkefuksjoner
-			countdownSecond-=1;
-			if(countdownSecond < 0){
-				countdownSecond = 59;
-				countdownMinute-=1;
+			this.countdownSecond-=1;
+			if(this.countdownSecond < 0){
+				this.countdownSecond = 59;
+				this.countdownMinute-=1;
 			}
-			if(countdownSecond < 10 ? countdownSeconds.innerHTML = `0${countdownSecond}` : countdownSeconds.innerHTML = countdownSecond);
+			if(this.countdownSecond < 10 ? this.secHTML.innerHTML = `0${this.countdownSecond}` : this.secHTML.innerHTML = this.countdownSecond);
 
-			if(countdownMinute < 10 ? countdownMinutes.innerHTML = `0${countdownMinute}` : countdownMinutes.innerHTML = countdownMinute);
+			if(this.countdownMinute < 10 ? this.minHTML.innerHTML = `0${this.countdownMinute}` : this.minHTML.innerHTML = this.countdownMinute);
 		}
 
 		var stopInterval = (arg) => {
-			clearInterval(this.countdownKlokke);
-			countdownSecond = 0;
-			countdownMinute = 0;
-			countdownSeconds.innerHTML = "00";
-			countdownMinutes.innerHTML = "00";
-			countDownresetButton.disabled = true;
-			countDownstartButton.disabled = false;
-			countDownstartButton.innerHTML = "Start";
+			clearInterval(this.klokke);
+			this.countdownSecond = 0;
+			this.countdownMinute = 0;
+			this.secHTML.innerHTML = "00";
+			this.minHTML.innerHTML = "00";
+			this.resetBtn.disabled = true;
+			this.startBtn.disabled = false;
+			this.startBtn.innerHTML = "Start";
 			if(arg !== 'no alarm'){
 				return alarm.play();
 			}
 		}
 
 		var isLovlig = () => {	
-			if(minChange.value == undefined || minChange.value < 0 || isNaN(minChange.value)){ //sjekke om brukeren skrev et tall eller ikke, og om "value" er defined
+			if(this.minChange.value == undefined || this.minChange.value < 0 || isNaN(this.minChange.value)){ //sjekke om brukeren skrev et tall eller ikke, og om "value" er defined
 				alert("Ingen bestemt tid");
 				return false;
-			} else if(minChange.value > 59 || minChange.value <= 0){
+			} else if(this.minChange.value > 59 || this.minChange.value <= 0){
 				alert("Min 1 og maks 59 minutter");
 				return false;
 			}
 
-			countdownMinute = minChange.value.replace(/^[0]+/g,""); //Hvis input.value er f.eks. 04, da bort 0... => 4 - altså ta bort "leading zeros".
+			this.countdownMinute = this.minChange.value.replace(/^[0]+/g,""); //Hvis input.value er f.eks. 04, da bort 0... => 4 - altså ta bort "leading zeros".
 			return true;
 
 		}
@@ -97,9 +100,9 @@
 <body>
 	<div class="countdown">
 		<h1 class="tall"><span id="countdownMinute">00</span>:<span id="countdownSecond">00</span></h1>
-		<h3 class="text" id="countDownStatusTekst">Nedtelling ikke startet</h3>
-		<button id="countDownstartButton">Start</button>
-		<button id="countDownresetButton">Reset</button>
+		<h3 class="text" id="statusHTML">Nedtelling ikke startet</h3>
+		<button id="startBtn">Start</button>
+		<button id="resetBtn">Reset</button>
 		<div class="changeCountdown">
 			<p class="text"><input id="minChange" value="" maxlength="2" pattern="([0-9]|[0-9])" class="number" placeholder="min" type="text" /><br>Minutter</p>
 		</div>
