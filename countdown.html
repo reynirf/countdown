@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Countdown</title>
+	<script>
+		var countdownSecond = 0,
+		countdownMinute = 0,
+		countdownKlokke,
+		countDownstartButton,
+		countDownresetButton,
+		countDownStatusTekst,
+		minChange,
+		d = document,
+		alarm = new Audio('alarm.mp3')
+
+		window.onload = () => {
+			countdownMinutes = d.getElementById("countdownMinute");
+			countdownSeconds = d.getElementById("countdownSecond");
+			countDownstartButton = d.getElementById("countDownstartButton");
+			countDownresetButton = d.getElementById("countDownresetButton");
+			countDownStatusTekst = d.getElementById("countDownStatusTekst");
+			minChange = d.getElementById("minChange");
+			countDownresetButton.disabled = true;
+
+			//onclicks
+			countDownstartButton.onclick = start;
+			countDownresetButton.onclick = reset;
+		}
+
+		var start = () => {
+			if(isLovlig()){
+				interval();
+				countDownresetButton.disabled = false;
+				countDownstartButton.disabled = true;
+
+			}
+		}
+
+		var reset = () => {
+			stopInterval('no alarm')
+			countDownStatusTekst.innerHTML = "Countdown got reset";
+		}
+		var interval = () => {
+			clockFunctions()
+			this.countdownKlokke = setInterval(function(){
+				if(countdownSecond == 1 && countdownMinute == 0){
+					stopInterval()
+				}
+				clockFunctions()
+			}, 1000);
+			countDownStatusTekst.innerHTML = "Countdown running";
+		}
+
+		var clockFunctions = () => {
+			countdownSecond-=1;
+			if(countdownSecond < 0){
+				countdownSecond = 59;
+				countdownMinute-=1;
+			}
+			if(countdownSecond < 10 ? countdownSeconds.innerHTML = `0${countdownSecond}` : countdownSeconds.innerHTML = countdownSecond);
+
+			if(countdownMinute < 10 ? countdownMinutes.innerHTML = `0${countdownMinute}` : countdownMinutes.innerHTML = countdownMinute);
+		}
+
+		var stopInterval = (arg) => {
+			clearInterval(this.countdownKlokke);
+			countdownSecond = 0;
+			countdownMinute = 0;
+			countdownSeconds.innerHTML = "00";
+			countdownMinutes.innerHTML = "00";
+			countDownresetButton.disabled = true;
+			countDownstartButton.disabled = false;
+			countDownstartButton.innerHTML = "Start";
+			if(arg !== 'no alarm'){
+				return alarm.play();
+			}
+		}
+
+		var isLovlig = () => {	
+			if(minChange.value == undefined || minChange.value < 0){
+				alert("Ingen bestemt tid");
+				return false;
+			} else if(minChange.value > 59 || minChange.value <= 0){
+				alert("Min 1 og maks 59 minutter");
+				return false;
+			}
+
+			countdownMinute = minChange.value.replace(/^[0]+/g,"");
+			return true;
+
+		}
+
+	</script>
+</head>
+<body>
+	<div class="countdown">
+		<h1 class="tall"><span id="countdownMinute">00</span>:<span id="countdownSecond">00</span></h1>
+		<h3 class="text" id="countDownStatusTekst">Countdown not started</h3>
+		<button id="countDownstartButton">Start</button>
+		<button id="countDownresetButton">Reset</button>
+		<div class="changeCountdown">
+			<p class="text"><input id="minChange" value="" maxlength="2" pattern="([0-9]|[0-9])" class="number" placeholder="min" type="text" /><br>Minutter</p>
+		</div>
+	</div>
+	<hr>
+	<h4>Reynir</h4>
+
+
+
+	<style>
+	@import url(https://fonts.googleapis.com/css?family=Roboto+Condensed:400|Roboto:100);
+
+	body {
+		align-items: center;
+		bottom: 0;
+		background-color: #34495e;
+		justify-content: center;
+		left: 0;
+		position: absolute;
+		right: 0;
+		top:0;
+		padding-top:8%;
+		text-align:center;
+	}
+	.stopwatch, .countdown {
+		display:inline-block;
+		margin:30px 100px;
+	}
+
+	.changeCountdown {
+		padding-top:10px;
+	}
+	.number {
+		text-align: center;
+		width:45px;
+		font-size:1em;
+		padding:13px;
+		margin:5px;
+		border-radius:30px;
+	}
+	.tall {
+		color: #ecf0f1;
+		font-size: 130px;
+		font-weight: 100;
+		font-family: 'Roboto', serif;
+		margin: 10px;
+		text-align: center;
+	}
+	.text,h4,hr {
+		color: #1abc9c;
+		font-size: 25px;
+		font-family: 'Roboto Condensed', serif;
+		font-weight: 40;
+		margin-top:10px;
+		margin-bottom: 10px;
+		text-align: center;			
+	}
+	hr {
+		width:50%;
+		margin-top:2em;
+	}
+	button[disabled]{
+		background:rgba(130,130,130,1);
+	}
+	button[disabled]:hover{
+		background:rgba(130,130,130,1);
+	}
+	button:hover {
+		background:rgba(255,255,255,0.9);
+	}
+	button {
+		margin:3px;
+		background:rgba(255,255,255,0.6);
+		padding:10px;
+		border-radius:6px;
+	}
+	</style>
+</body>
+</html>
