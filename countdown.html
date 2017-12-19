@@ -5,8 +5,8 @@
 	<script>
 		"use strict";
 
-		var countdownSecond = 0,
-			countdownMinute = 0,
+		var second = 0,
+			minute = 0,
 			klokke,
 			secHTML,
 			minHTML,
@@ -19,8 +19,8 @@
 		 	  alarm = new Audio('alarm.mp3');
 
 		window.onload = () => {
-			this.minHTML = d.getElementById("countdownMinute");
-			this.secHTML = d.getElementById("countdownSecond");
+			this.minHTML = d.getElementById("minute");
+			this.secHTML = d.getElementById("second");
 			this.startBtn = d.getElementById("startBtn");
 			this.resetBtn = d.getElementById("resetBtn");
 			this.statusHTML = d.getElementById("statusHTML");
@@ -47,7 +47,7 @@
 		var interval = () => {
 			clockFunctions() //få tallene opp på skjermen før Intervallet kjøres (ellers må du vente ett sekund før du får tallene opp på skjermen)
 			this.klokke = setInterval(function(){
-				if(countdownSecond == 1 && this.countdownMinute == 0){
+				if(second == 1 && this.minute == 0){
 					stopInterval() //stoppe klokken med alarm når countdown-en er ferdig
 				}
 				clockFunctions() //kjøre klokkefunksjonene hvert sekund
@@ -57,20 +57,20 @@
 
 		var clockFunctions = () => {
 			//vanlige klokkefuksjoner
-			this.countdownSecond-=1;
-			if(this.countdownSecond < 0){
-				this.countdownSecond = 59;
-				this.countdownMinute-=1;
+			this.second-=1;
+			if(this.second < 0){
+				this.second = 59;
+				this.minute-=1;
 			}
-			if(this.countdownSecond < 10 ? this.secHTML.innerHTML = `0${this.countdownSecond}` : this.secHTML.innerHTML = this.countdownSecond);
+			if(this.second < 10 ? this.secHTML.innerHTML = `0${this.second}` : this.secHTML.innerHTML = this.second);
 
-			if(this.countdownMinute < 10 ? this.minHTML.innerHTML = `0${this.countdownMinute}` : this.minHTML.innerHTML = this.countdownMinute);
+			if(this.minute < 10 ? this.minHTML.innerHTML = `0${this.minute}` : this.minHTML.innerHTML = this.minute);
 		}
 
 		var stopInterval = (arg) => {
 			clearInterval(this.klokke);
-			this.countdownSecond = 0;
-			this.countdownMinute = 0;
+			this.second = 0;
+			this.minute = 0;
 			this.secHTML.innerHTML = "00";
 			this.minHTML.innerHTML = "00";
 			this.resetBtn.disabled = true;
@@ -90,7 +90,7 @@
 				return false;
 			}
 
-			this.countdownMinute = this.minChange.value.replace(/^[0]+/g,""); //Hvis input.value er f.eks. 04, da bort 0... => 4 - altså ta bort "leading zeros".
+			this.minute = this.minChange.value.replace(/^[0]+/g,""); //Hvis input.value er f.eks. 04, da bort 0... => 4 - altså ta bort "leading zeros".
 			return true;
 
 		}
@@ -99,7 +99,7 @@
 </head>
 <body>
 	<div class="countdown">
-		<h1 class="tall"><span id="countdownMinute">00</span>:<span id="countdownSecond">00</span></h1>
+		<h1 class="tall"><span id="minute">00</span>:<span id="second">00</span></h1>
 		<h3 class="text" id="statusHTML">Nedtelling ikke startet</h3>
 		<button id="startBtn">Start</button>
 		<button id="resetBtn">Reset</button>
