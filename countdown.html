@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Countdown</title>
 	<script>
 		"use strict";
@@ -8,17 +9,20 @@
 		var second = 0,
 			minute = 0,
 			klokke,
+			sluttInterval,
 			secHTML,
 			minHTML,
 			startBtn,
 			resetBtn,
 			statusHTML,
-			minChange;
+			minChange,
+			numbersTxt;
 
 		const d = document,
 		 	  alarm = new Audio('alarm.mp3');
 
 		window.onload = () => {
+			this.numbersTxt = d.getElementById("tall");
 			this.minHTML = d.getElementById("minute");
 			this.secHTML = d.getElementById("second");
 			this.startBtn = d.getElementById("startBtn");
@@ -35,6 +39,8 @@
 		var start = () => {
 			if(isLovlig()){ //sjekke om value fra input er "lovlig"
 				interval(); //starte klokke
+				clearInterval(this.sluttInterval)
+				this.numbersTxt.style.color = '#ecf0f1'
 				this.resetBtn.disabled = false;
 				this.startBtn.disabled = true;
 			}
@@ -47,10 +53,28 @@
 		var interval = () => {
 			clockFunctions() //få tallene opp på skjermen før Intervallet kjøres (ellers må du vente ett sekund før du får tallene opp på skjermen)
 			this.klokke = setInterval(function(){
-				if(second == 1 && this.minute == 0){
-					stopInterval() //stoppe klokken med alarm når countdown-en er ferdig
-				}
 				clockFunctions() //kjøre klokkefunksjonene hvert sekund
+				if(this.minute == 0 && this.second !== 0){
+					this.numbersTxt.style.color = '#ff4d4d'
+				}
+				if(this.second <= 1 && this.minute == 0){
+					var toggle = 1;
+					this.sluttInterval = setInterval(() => {
+						if(toggle === 1) {
+							this.numbersTxt.style.color = 'red'
+							toggle = 2;
+						}
+						else {
+							this.numbersTxt.style.color = '#ecf0f1'
+							toggle = 1;
+						}
+
+					}, 300)
+					setTimeout(() => {
+						clearInterval(this.sluttInterval)
+					}, 5000);
+					stopInterval('') //stoppe klokken med alarm når countdown-en er ferdig
+				}
 			}, 1000);
 			this.statusHTML.innerHTML = "Nedtelling kjører...";
 		}
@@ -69,6 +93,7 @@
 
 		var stopInterval = (arg) => {
 			clearInterval(this.klokke);
+			this.statusHTML.innerHTML = "Tiden er ute...";
 			this.second = 0;
 			this.minute = 0;
 			this.secHTML.innerHTML = "00";
@@ -99,12 +124,12 @@
 </head>
 <body>
 	<div class="countdown">
-		<h1 class="tall"><span id="minute">00</span>:<span id="second">00</span></h1>
+		<h1 id="tall"><span id="minute">00</span>:<span id="second">00</span></h1>
 		<h3 class="text" id="statusHTML">Nedtelling ikke startet</h3>
 		<button id="startBtn">Start</button>
 		<button id="resetBtn">Reset</button>
 		<div class="changeCountdown">
-			<p class="text"><input id="minChange" value="" maxlength="2" pattern="([0-9]|[0-9])" class="number" placeholder="min" type="text" /><br>Minutter</p>
+			<p class="text"><input id="minChange" value="4" maxlength="2" pattern="([0-9]|[0-9])" class="number" placeholder="min" type="text" /><br>Minutter</p>
 		</div>
 	</div>
 	<hr>
@@ -143,7 +168,7 @@
 		margin:5px;
 		border-radius:30px;
 	}
-	.tall {
+	#tall {
 		color: #ecf0f1;
 		font-size: 130px;
 		font-weight: 100;
