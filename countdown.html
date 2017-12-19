@@ -48,6 +48,7 @@
 
 		var reset = () => {
 			stopInterval('no alarm') //stoppe klokke uten alarm
+			this.numbersTxt.style.color = '#ecf0f1'
 			this.statusHTML.innerHTML = "Nedtelling tilbakestilt";
 		}
 		var interval = () => {
