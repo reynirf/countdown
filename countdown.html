@@ -4,14 +4,14 @@
 	<title>Countdown</title>
 	<script>
 		var countdownSecond = 0,
-		countdownMinute = 0,
-		countdownKlokke,
-		countDownstartButton,
-		countDownresetButton,
-		countDownStatusTekst,
-		minChange,
-		d = document,
-		alarm = new Audio('alarm.mp3')
+			countdownMinute = 0,
+			countdownKlokke,
+			countDownstartButton,
+			countDownresetButton,
+			countDownStatusTekst,
+			minChange,
+			d = document,
+			alarm = new Audio('alarm.mp3')
 
 		window.onload = () => {
 			countdownMinutes = d.getElementById("countdownMinute");
@@ -28,30 +28,30 @@
 		}
 
 		var start = () => {
-			if(isLovlig()){
-				interval();
+			if(isLovlig()){ //sjekke om value fra input er "lovlig"
+				interval(); //starte klokke
 				countDownresetButton.disabled = false;
 				countDownstartButton.disabled = true;
-
 			}
 		}
 
 		var reset = () => {
-			stopInterval('no alarm')
-			countDownStatusTekst.innerHTML = "Countdown got reset";
+			stopInterval('no alarm') //stoppe klokke uten alarm
+			countDownStatusTekst.innerHTML = "Nedtelling tilbakestilt";
 		}
 		var interval = () => {
-			clockFunctions()
+			clockFunctions() //få tallene opp på skjermen før Intervallet kjøres (ellers må du vente ett sekund før du får tallene opp på skjermen)
 			this.countdownKlokke = setInterval(function(){
 				if(countdownSecond == 1 && countdownMinute == 0){
-					stopInterval()
+					stopInterval() //stoppe klokken med alarm når countdown-en er ferdig
 				}
-				clockFunctions()
+				clockFunctions() //kjøre klokkefunksjonene hvert sekund
 			}, 1000);
-			countDownStatusTekst.innerHTML = "Countdown running";
+			countDownStatusTekst.innerHTML = "Nedtelling kjører...";
 		}
 
 		var clockFunctions = () => {
+			//vanlige klokkefuksjoner
 			countdownSecond-=1;
 			if(countdownSecond < 0){
 				countdownSecond = 59;
@@ -77,7 +77,7 @@
 		}
 
 		var isLovlig = () => {	
-			if(minChange.value == undefined || minChange.value < 0){
+			if(minChange.value == undefined || minChange.value < 0 || isNaN(minChange.value)){ //sjekke om brukeren skrev et tall eller ikke, og om "value" er defined
 				alert("Ingen bestemt tid");
 				return false;
 			} else if(minChange.value > 59 || minChange.value <= 0){
@@ -85,7 +85,7 @@
 				return false;
 			}
 
-			countdownMinute = minChange.value.replace(/^[0]+/g,"");
+			countdownMinute = minChange.value.replace(/^[0]+/g,""); //Hvis input.value er f.eks. 04, da bort 0... => 4 - altså ta bort "leading zeros".
 			return true;
 
 		}
@@ -95,7 +95,7 @@
 <body>
 	<div class="countdown">
 		<h1 class="tall"><span id="countdownMinute">00</span>:<span id="countdownSecond">00</span></h1>
-		<h3 class="text" id="countDownStatusTekst">Countdown not started</h3>
+		<h3 class="text" id="countDownStatusTekst">Nedtelling ikke startet</h3>
 		<button id="countDownstartButton">Start</button>
 		<button id="countDownresetButton">Reset</button>
 		<div class="changeCountdown">
@@ -122,7 +122,7 @@
 		padding-top:8%;
 		text-align:center;
 	}
-	.stopwatch, .countdown {
+	.countdown {
 		display:inline-block;
 		margin:30px 100px;
 	}
@@ -165,14 +165,11 @@
 	a:hover {
 		color:rgba(200,220,200,0.8);
 	}
-	button[disabled]{
-		background:rgba(130,130,130,1);
-	}
-	button[disabled]:hover{
-		background:rgba(130,130,130,1);
-	}
 	button:hover {
 		background:rgba(255,255,255,0.9);
+	}
+	button[disabled], button[disabled]:hover {
+		background:rgba(130,130,130,1);
 	}
 	button {
 		margin:3px;
