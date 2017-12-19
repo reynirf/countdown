@@ -58,7 +58,7 @@
 				if(this.minute == 0 && this.second !== 0){
 					this.numbersTxt.style.color = '#ff4d4d'
 				}
-				if(this.second <= 1 && this.minute == 0){
+				if(this.second <= 0 && this.minute == 0){
 					var toggle = 1;
 					this.sluttInterval = setInterval(() => {
 						if(toggle === 1) {
@@ -125,7 +125,7 @@
 </head>
 <body>
 	<div class="countdown">
-		<h1 id="tall"><span id="minute">00</span>:<span id="second">00</span></h1>
+		<h1 id="tall"><span id="minute">00</span> : <span id="second">00</span></h1>
 		<h3 class="text" id="statusHTML">Nedtelling ikke startet</h3>
 		<button id="startBtn">Start</button>
 		<button id="resetBtn">Reset</button>
@@ -150,7 +150,7 @@
 		position: absolute;
 		right: 0;
 		top:0;
-		padding-top:8%;
+		padding-top:2.5%;
 		text-align:center;
 	}
 	.countdown {
@@ -171,7 +171,7 @@
 	}
 	#tall {
 		color: #ecf0f1;
-		font-size: 130px;
+		font-size: 12.5em;
 		font-weight: 100;
 		font-family: 'Roboto', serif;
 		margin: 10px;
